@@ -8,14 +8,15 @@ use Ramsey\Uuid\Uuid;
 
 class UnitController extends Controller
 {
-    public function getUnits()
+    public function getUnits(Request $request)
     {
-        $units = Unit::all();
+        $units = Unit::orderBy('name', 'asc')->get();
         return $units;
+
     }
 
     public function search(Request $request)
-{
+    {
     try {
         $query = $request->input('name');
 
@@ -27,7 +28,7 @@ class UnitController extends Controller
     } catch (\Throwable $th) {
         return response()->json(['error' => 'Error searching units: ' . $th->getMessage()], 500);
     }
-}
+    }
 
     public function getDetailUnit($id)
     {
@@ -50,7 +51,7 @@ class UnitController extends Controller
             $uuid = Uuid::uuid4()->toString();
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
-                'slug' => 'required|string|max:10',
+                'slug' => 'required|string|max:100',
             ]);
 
             $data = [
@@ -78,7 +79,7 @@ class UnitController extends Controller
 
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
-                'slug' => 'required|string|max:10',
+                'slug' => 'required|string|max:100',
             ]);
 
             $data = [

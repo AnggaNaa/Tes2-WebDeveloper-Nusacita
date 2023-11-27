@@ -32,9 +32,9 @@ export default function Login() {
       setAuthToken(token);
       localStorage.setItem("token", token);
 
-      return navigate("/home");
+      return navigate("/");
     } catch (error) {
-      setError("Login failed. Please check your credentials.");
+      setError("Login failed. Please check your email and password.");
       console.error(error);
     }
   };

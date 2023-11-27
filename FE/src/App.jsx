@@ -5,7 +5,7 @@ import Home from "./pages/Home";
 
 function IsLogin() {
   if (!localStorage.token) {
-    return <Navigate to={"/login"} replace />;
+    <Navigate to={"/login"} replace />;
   }
   return null;
 }
@@ -13,10 +13,7 @@ function IsLogin() {
 function IsNotLogin() {
   const navigate = useNavigate();
   if (localStorage.token) {
-    // setTimeout(() => {
-    //   window.location.reload();
-    // }, 5000);
-    return navigate("/home");
+    <Navigate to={"/"} replace />;
   }
   return null;
 }
@@ -25,7 +22,7 @@ function App() {
   return (
     <Routes>
       <Route element={IsLogin()}>
-        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Home />} />
       </Route>
       <Route element={IsNotLogin()}>
         <Route path="/register" element={<Register />} />

@@ -8,32 +8,39 @@ use Ramsey\Uuid\Uuid;
 
 class DepartementController extends Controller
 {
-    public function getDepartements()
+    public function getDepartements(Request $request)
     {
-        return $departements = Departement::with('unit')->get();
+        try {
+            $departements = Departement::with('unit')->orderBy('name', 'asc')->get();
+            return $departements;
+
+            // $limit = $request->input('limit', 5);
+            // $offset = $request->input('offset', 0);
+
+            // $departments = Departement::with('unit')
+            //     ->skip($offset)
+            //     ->take($limit)
+            //     ->get();
+
+            // return $departments;
+
+        } catch (\Exception $th) {
+            return response()->json(['error' => 'Error getting departements: ' . $th->getMessage()], 500);
+        }
 
     }
 
     public function search(Request $request)
     {
-    try {
-        $searchTerm = $request->input('name');
+        try {
 
-        $result = Departement::with('unit')
-            ->where('name', 'LIKE', "%$searchTerm%")
-            ->orWhereHas('unit', function ($query) use ($searchTerm) {
-                $query->where('name', 'LIKE', "%$searchTerm%");
-            })
-            ->get();
+            $query = $request->input("name");
+            $departements = Departement::where("name", 'LIKE', "%$query%")->orWhere('slug', 'LIKE', "%$query%")->Get();
 
-            if ($result->isEmpty()) {
-                return response()->json(['message' => 'No departements found for the given search term.']);
-            }
-
-        return $result;
-    } catch (\Throwable $th) {
-        return response()->json(['error' => 'Error searching departements: ' . $th->getMessage()], 500);
-    }
+            return $departements;
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'Error searching departements: ' . $th->getMessage()], 500);
+        }
     }
 
 
@@ -57,7 +64,7 @@ class DepartementController extends Controller
             $uuid = Uuid::uuid4()->toString();
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
-                'slug' => 'required|string|max:10',
+                'slug' => 'required|string|max:100',
                 'unit_id' => 'required',
             ]);
 
@@ -86,12 +93,13 @@ class DepartementController extends Controller
             }
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
-                'slug' => 'required|string|max:10',
+                'slug' => 'required|string|max:100',
                 'unit_id' => 'required',
             ]);
             $data = [
                 'name' => $validated['name'],
                 'slug' => $validated['slug'],
+                'unit_id' => $validated['unit_id'],
             ];
             $departements->update($data);
             return $departements;

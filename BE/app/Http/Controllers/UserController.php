@@ -73,7 +73,11 @@ class UserController extends Controller
 
             return $this->respondWithToken($token);
         } catch (\Throwable $th) {
-            return 'Error SignUp in: ' . $th->getMessage();
+            // return 'Error SignUp in: ' . $th->getMessage();
+            return response()->json([
+                // 'error' => 'Error SignUp: ' .
+                 $th->getMessage()], 500);
+
         }
     }
 
@@ -98,5 +102,3 @@ class UserController extends Controller
         ]);
     }
 }
-
-

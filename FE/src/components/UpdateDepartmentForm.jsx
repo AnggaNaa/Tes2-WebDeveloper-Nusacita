@@ -1,4 +1,3 @@
-// UpdateDepartmentForm.jsx
 import React, { useState, useEffect } from "react";
 import {
   Button,
@@ -12,8 +11,8 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  useDisclosure,
   Select,
+  useDisclosure,
 } from "@chakra-ui/react";
 
 const UpdateDepartmentForm = ({
@@ -25,20 +24,19 @@ const UpdateDepartmentForm = ({
   const { isOpen, onOpen } = useDisclosure();
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
-  const [selectedUnit, setSelectedUnit] = useState(null);
+  const [selectedUnitId, setSelectedUnitId] = useState("");
 
   useEffect(() => {
     if (selectedDepartment) {
       setName(selectedDepartment.name);
       setSlug(selectedDepartment.slug);
-      setSelectedUnit(selectedDepartment.unit);
+      setSelectedUnitId(selectedDepartment.unit?.id);
       onOpen();
     }
   }, [selectedDepartment, onOpen]);
 
   const handleSubmit = () => {
-    console.log("ini id dari update", selectedUnit);
-    if (name.trim() === "" || slug.trim() === "" || !selectedUnit) {
+    if (name.trim() === "" || slug.trim() === "" || !selectedUnitId) {
       return;
     }
 
@@ -46,12 +44,12 @@ const UpdateDepartmentForm = ({
       id: selectedDepartment.id,
       name: name,
       slug: slug,
-      unit_id: selectedUnit.id,
+      unit_id: selectedUnitId,
     });
 
     setName("");
     setSlug("");
-    setSelectedUnit(null);
+    setSelectedUnitId("");
 
     onClose();
   };
@@ -82,12 +80,8 @@ const UpdateDepartmentForm = ({
           <FormControl>
             <FormLabel>Unit</FormLabel>
             <Select
-              value={selectedUnit ? selectedUnit.id : ""}
-              onChange={(e) => {
-                const unitId = e.target.value;
-                const unit = units.find((u) => u.id === unitId);
-                setSelectedUnit(unit);
-              }}
+              value={selectedUnitId}
+              onChange={(e) => setSelectedUnitId(e.target.value)}
             >
               <option value="" disabled>
                 Pilih Unit

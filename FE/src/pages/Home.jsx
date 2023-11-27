@@ -26,16 +26,14 @@ const Home = () => {
   const [departmentSearch, setDepartmentSearch] = useState("");
   const [selectedUnit, setSelectedUnit] = useState(null);
   const [selectedDepartment, setSelectedDepartment] = useState(null);
-  const navigate = useNavigate();
 
   const fetchUnits = async () => {
     try {
-      const response = await API.get("/units", {
+      const response = await API.get(`/units`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      console.log(response.data);
       setUnits(response.data);
     } catch (error) {
       console.error("Error fetching Units:", error);
@@ -44,11 +42,13 @@ const Home = () => {
 
   const fetchDepartments = async () => {
     try {
-      const response = await API.get("/departements", {
+      //   const response = await API.get("/departements",
+      const response = await API.get(`/departements`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
+
       setDepartments(response.data);
     } catch (error) {
       console.error("Error fetching Departments:", error);
@@ -69,8 +69,6 @@ const Home = () => {
           },
         }
       );
-
-      console.log(response.data);
       setUnits([...units, response.data]);
     } catch (error) {
       console.error("Error create Units:", error);
@@ -85,7 +83,6 @@ const Home = () => {
         },
       });
 
-      // Perbarui state units setelah penghapusan
       setUnits((prevUnits) => prevUnits.filter((unit) => unit.id !== unitId));
     } catch (error) {
       console.error("Error deleting Unit:", error);
@@ -126,7 +123,6 @@ const Home = () => {
         }
       );
       setDepartments([...departments, response.data]);
-      console.log("ini response departement", response.data);
       fetchDepartments();
     } catch (error) {
       console.error("Error create Departments:", error);
@@ -150,6 +146,7 @@ const Home = () => {
   };
 
   const handleUpdateDepartment = async (data) => {
+    console.log("ini data update", data);
     try {
       const response = await API.patch(
         `/departement/${data.id}`,
@@ -165,13 +162,17 @@ const Home = () => {
         }
       );
 
-      console.log("ini response departement", response.data);
+      console.log("ini response", response.data);
 
       setDepartments((prevDepartments) =>
         prevDepartments.map((department) =>
-          department.id === data.id ? response.data : department
+          department.id === data.id
+            ? { ...response.data, unit: department.unit }
+            : department
         )
       );
+
+      fetchDepartments();
     } catch (error) {
       console.error("Error update Department:", error);
     }
@@ -183,7 +184,7 @@ const Home = () => {
 
   const handleUnitSearch = async () => {
     try {
-      const response = await API.get(`/unit/search?query=${unitSearch}`, {
+      const response = await API.get(`/unit/search?name=${unitSearch}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -197,7 +198,7 @@ const Home = () => {
   const handleDepartmentSearch = async () => {
     try {
       const response = await API.get(
-        `/departements/search?query=${departmentSearch}`,
+        `/departements/search?name=${departmentSearch}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -212,10 +213,7 @@ const Home = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    setInterval(() => {
-      window.location.reload();
-    }, 1000);
-    navigate("/login");
+    window.location.href = "/login";
   };
 
   useEffect(() => {
@@ -323,33 +321,35 @@ const Home = () => {
           </Tr>
         </Thead>
         <Tbody>
-          {departments.map((department, index) => (
-            <Tr key={department.id}>
-              <Td>{index + 1}</Td>
-              <Td>{department.name}</Td>
-              <Td>{department.unit?.name}</Td>
-              <Td>{department.slug}</Td>
-              <Td>
-                <Button
-                  colorScheme="teal"
-                  size="sm"
-                  onClick={() => setSelectedDepartment(department)}
-                >
-                  Update
-                </Button>
-                <Button
-                  colorScheme="red"
-                  size="sm"
-                  ml={2}
-                  onClick={() => handleDeleteDepartment(department.id)}
-                >
-                  Delete
-                </Button>
-              </Td>
-            </Tr>
-          ))}
+          {departments &&
+            departments.map((department, index) => (
+              <Tr key={department.id}>
+                <Td>{index + 1}</Td>
+                <Td>{department.name}</Td>
+                <Td>{department.unit?.name}</Td>
+                <Td>{department.slug}</Td>
+                <Td>
+                  <Button
+                    colorScheme="teal"
+                    size="sm"
+                    onClick={() => setSelectedDepartment(department)}
+                  >
+                    Update
+                  </Button>
+                  <Button
+                    colorScheme="red"
+                    size="sm"
+                    ml={2}
+                    onClick={() => handleDeleteDepartment(department.id)}
+                  >
+                    Delete
+                  </Button>
+                </Td>
+              </Tr>
+            ))}
         </Tbody>
       </Table>
+
       {selectedDepartment && (
         <UpdateDepartmentForm
           onUpdateDepartment={handleUpdateDepartment}

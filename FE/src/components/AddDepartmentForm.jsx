@@ -24,30 +24,24 @@ const AddDepartmentForm = ({ onAddDepartment }) => {
   const [departmentSlug, setDepartmentSlug] = useState("");
 
   const handleSubmit = () => {
-    // Validasi atau logika lainnya sebelum menambah departemen
     if (
       departmentName.trim() === "" ||
       !selectedUnit ||
       departmentSlug.trim() === ""
     ) {
-      // Handle validasi jika diperlukan
       return;
     }
 
-    // Panggil fungsi onAddDepartment dengan data departemen yang baru
     onAddDepartment({
       name: departmentName,
       unit: selectedUnit,
       slug: departmentSlug,
     });
 
-    // Reset nilai formulir setelah submit
-    // onAddDepartment(data);
     setDepartmentName("");
     setSelectedUnit(null);
     setDepartmentSlug("");
 
-    // Tutup modal
     onClose();
   };
 
@@ -73,11 +67,7 @@ const AddDepartmentForm = ({ onAddDepartment }) => {
             </FormControl>
             <FormControl>
               <FormLabel>Unit</FormLabel>
-              <SelectUnit
-                onSelectUnit={setSelectedUnit}
-                // onSelect={(unit) => setSelectedUnit(unit)}
-                // selectedUnit={setSelectedUnit}
-              />
+              <SelectUnit onSelectUnit={setSelectedUnit} />
             </FormControl>
             <FormControl>
               <FormLabel>Slug</FormLabel>

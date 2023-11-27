@@ -30,13 +30,17 @@ export default function Register() {
         password: password,
       });
 
+      // console.log(response.data);
+
       const token = response.data.token;
       setAuthToken(token);
 
       return navigate("/login");
     } catch (error) {
-      setError("Login failed. Please check your credentials.");
-      console.error(error);
+      const errorMessage = error.response.data;
+      setError(errorMessage);
+
+      return navigate("/register");
     }
   };
   return (
