@@ -15,6 +15,8 @@ return new class extends Migration
             $table->uuid("id")->primary();
             $table->string("name");
             $table->string("slug");
+            $table->integer("m_power_2023");
+            $table->integer("m_power_2024");
             $table->timestamps();
             $table->uuid("unit_id");
             $table->foreign('unit_id')->references('id')->on('m_units');

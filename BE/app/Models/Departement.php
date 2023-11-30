@@ -21,6 +21,8 @@ class Departement extends Model
         'id',
         'name',
         'slug',
+        'm_power_2023',
+        'm_power_2024',
         'created_at',
         'updated_at',
         'deleted_at',

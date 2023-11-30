@@ -66,6 +66,8 @@ class DepartementController extends Controller
                 'name' => 'required|string|max:255',
                 'slug' => 'required|string|max:100',
                 'unit_id' => 'required',
+                'm_power_2023' => 'required|numeric',
+                'm_power_2024' => 'required|numeric',
             ]);
 
             $data = [
@@ -73,6 +75,9 @@ class DepartementController extends Controller
                 'name' => $validated['name'],
                 'slug' => $validated['slug'],
                 'unit_id' => $validated['unit_id'],
+                'm_power_2023' => $validated['m_power_2023'],
+                'm_power_2024' => $validated['m_power_2024'],
+
             ];
 
             Departement::create($data);
@@ -95,11 +100,15 @@ class DepartementController extends Controller
                 'name' => 'required|string|max:255',
                 'slug' => 'required|string|max:100',
                 'unit_id' => 'required',
+                'm_power_2023' => 'required|numeric',
+                'm_power_2024' => 'required|numeric',
             ]);
             $data = [
                 'name' => $validated['name'],
                 'slug' => $validated['slug'],
                 'unit_id' => $validated['unit_id'],
+                'm_power_2023' => $validated['m_power_2023'],
+                'm_power_2024' => $validated['m_power_2024'],
             ];
             $departements->update($data);
             return $departements;

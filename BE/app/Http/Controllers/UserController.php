@@ -73,9 +73,7 @@ class UserController extends Controller
 
             return $this->respondWithToken($token);
         } catch (\Throwable $th) {
-            // return 'Error SignUp in: ' . $th->getMessage();
             return response()->json([
-                // 'error' => 'Error SignUp: ' .
                  $th->getMessage()], 500);
 
         }
@@ -91,6 +89,7 @@ class UserController extends Controller
             'id' => $user->id,
             'username' => $user->username,
             'email' => $user->email,
+            'role' => $user->role,
             // Add more fields as needed
         ];
 
@@ -100,5 +99,47 @@ class UserController extends Controller
             'expires_in' => JWTAuth::factory()->getTTL() * 60,
             'user' => $userData, // Include additional user data in the response
         ]);
+    }
+
+    public function getUsers() {
+        try{
+            $users = User::all();
+            return $users;
+        } catch (\Throwable $th) {
+            return response()->json([
+                 $th->getMessage()], 500);
+        }
+    }
+
+    public function getDetailUser($id) {
+        try{
+            $user = User::find($id);
+            return $user;
+        } catch (\Throwable $th) {
+            return response()->json([
+                 $th->getMessage()], 500);
+        }
+    }
+
+    public function update(Request $request, $id) {
+    try{
+        $user = User::find($id);
+        $user->update($request->all());
+        return $user;
+    } catch (\Throwable $th) {
+        return response()->json([
+             $th->getMessage()], 500);
+    }
+    }
+
+    public function delete($id) {
+        try{
+            $user = User::find($id);
+            $user->delete();
+            return $user;
+        } catch (\Throwable $th) {
+            return response()->json([
+                 $th->getMessage()], 500);
+        }
     }
 }

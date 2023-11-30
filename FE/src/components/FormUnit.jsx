@@ -39,7 +39,7 @@ const AddUnitForm = ({ onAddUnit }) => {
 
   return (
     <>
-      <Button colorScheme="green" onClick={onOpen}>
+      <Button colorScheme="blue" onClick={onOpen}>
         Add Unit
       </Button>
 

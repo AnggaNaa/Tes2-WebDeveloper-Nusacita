@@ -22,6 +22,8 @@ const AddDepartmentForm = ({ onAddDepartment }) => {
   const [departmentName, setDepartmentName] = useState("");
   const [selectedUnit, setSelectedUnit] = useState(null);
   const [departmentSlug, setDepartmentSlug] = useState("");
+  const [manPower2023, setManPower2023] = useState(0);
+  const [manPower2024, setManPower2024] = useState(0);
 
   const handleSubmit = () => {
     if (
@@ -36,18 +38,22 @@ const AddDepartmentForm = ({ onAddDepartment }) => {
       name: departmentName,
       unit: selectedUnit,
       slug: departmentSlug,
+      m_power_2023: manPower2023,
+      m_power_2024: manPower2024,
     });
 
     setDepartmentName("");
     setSelectedUnit(null);
     setDepartmentSlug("");
+    setManPower2023(0);
+    setManPower2024(0);
 
     onClose();
   };
 
   return (
     <>
-      <Button colorScheme="green" onClick={onOpen}>
+      <Button colorScheme="blue" onClick={onOpen}>
         Add Department
       </Button>
 
@@ -75,6 +81,22 @@ const AddDepartmentForm = ({ onAddDepartment }) => {
                 type="text"
                 value={departmentSlug}
                 onChange={(e) => setDepartmentSlug(e.target.value)}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Existing Man Power 2023</FormLabel>
+              <Input
+                type="number"
+                value={manPower2023}
+                onChange={(e) => setManPower2023(e.target.value)}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Existing Man Power 2024</FormLabel>
+              <Input
+                type="number"
+                value={manPower2024}
+                onChange={(e) => setManPower2024(e.target.value)}
               />
             </FormControl>
           </ModalBody>

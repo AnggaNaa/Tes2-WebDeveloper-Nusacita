@@ -23,6 +23,7 @@ class User extends Authenticatable implements JWTSubject
     public $incrementing = false;
     protected $primaryKey = 'id';
 
+
     protected static function boot()
     {
         parent::boot();
@@ -42,6 +43,7 @@ class User extends Authenticatable implements JWTSubject
         'username',
         'email',
         'password',
+        'role'
     ];
 
     /**
@@ -62,6 +64,7 @@ class User extends Authenticatable implements JWTSubject
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'role' => 'string'
     ];
     public function getJWTIdentifier()
     {

@@ -22,7 +22,8 @@ export default function Register() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleRegister = async () => {
+  const handleRegister = async (event) => {
+    event.preventDefault();
     try {
       const response = await API.post("/signup", {
         username: username,
@@ -30,15 +31,14 @@ export default function Register() {
         password: password,
       });
 
-      // console.log(response.data);
-
       const token = response.data.token;
       setAuthToken(token);
 
-      return navigate("/login");
+      return navigate("/");
     } catch (error) {
       const errorMessage = error.response.data;
       setError(errorMessage);
+      console.log(error);
 
       return navigate("/register");
     }
@@ -91,7 +91,7 @@ export default function Register() {
               variant={"solid"}
               onClick={handleRegister}
             >
-              Sign in
+              Sign up
             </Button>
           </Stack>
         </Stack>

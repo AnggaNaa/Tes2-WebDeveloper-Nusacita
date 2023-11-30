@@ -10,8 +10,12 @@ class UnitController extends Controller
 {
     public function getUnits(Request $request)
     {
-        $units = Unit::orderBy('name', 'asc')->get();
-        return $units;
+        try{
+            $units = Unit::orderBy('name', 'asc')->get();
+            return $units;
+        } catch (\Exception $th) {
+            return response()->json(['error' => 'Error getting units: ' . $th->getMessage()], 500);
+        }
 
     }
 

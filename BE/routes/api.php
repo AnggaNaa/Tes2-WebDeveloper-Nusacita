@@ -24,19 +24,44 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/signin', [UserController::class, "signIn"]);
 Route::post('/signup', [UserController::class, "signUp"]);
 
+// Route::middleware(['jwt.auth','role:admin'])->group(function () {
+//     Route::get('/units', [UnitController::class, "getUnits"]);
+//     Route::get('/units/{id}', [UnitController::class, "getDetailUnit"]);
+//     Route::post('/units', [UnitController::class, "create"]);
+//     Route::delete('/units/{id}', [UnitController::class, "delete"]);
+//     Route::patch('/units/{id}', [UnitController::class, "update"]);
+//     Route::get('/unit/search', [UnitController::class, 'search']);
+
+//     Route::get('/departements', [DepartementController::class, "getDepartements"]);
+//     Route::post('/departements', [DepartementController::class, "create"]);
+//     Route::patch('/departement/{id}', [DepartementController::class, "update"]);
+//     Route::delete('/departement/{id}', [DepartementController::class, "delete"]);
+//     Route::get('/departement/{id}', [DepartementController::class, "getDetailDepartement"]);
+//     Route::get('/departements/search', [DepartementController::class, 'search']);
+// });
+
 Route::middleware(['jwt.auth'])->group(function () {
     Route::get('/units', [UnitController::class, "getUnits"]);
     Route::get('/units/{id}', [UnitController::class, "getDetailUnit"]);
-    Route::post('/units', [UnitController::class, "create"]);
-    Route::delete('/units/{id}', [UnitController::class, "delete"]);
-    Route::patch('/units/{id}', [UnitController::class, "update"]);
     Route::get('/unit/search', [UnitController::class, 'search']);
 
     Route::get('/departements', [DepartementController::class, "getDepartements"]);
-    Route::post('/departements', [DepartementController::class, "create"]);
-    Route::patch('/departement/{id}', [DepartementController::class, "update"]);
-    Route::delete('/departement/{id}', [DepartementController::class, "delete"]);
     Route::get('/departement/{id}', [DepartementController::class, "getDetailDepartement"]);
     Route::get('/departements/search', [DepartementController::class, 'search']);
-});
 
+    Route::middleware(['jwt.auth','role:admin'])->group(function () {
+        Route::post('/units', [UnitController::class, "create"]);
+        Route::delete('/units/{id}', [UnitController::class, "delete"]);
+        Route::patch('/units/{id}', [UnitController::class, "update"]);
+        Route::post('/departements', [DepartementController::class, "create"]);
+        Route::patch('/departement/{id}', [DepartementController::class, "update"]);
+        Route::delete('/departement/{id}', [DepartementController::class, "delete"]);
+
+        Route::get('/users', [UserController::class, "getUsers"]);
+        Route::get('/users/{id}', [UserController::class, "getDetailUser"]);
+        Route::post('/users', [UserController::class, "create"]);
+        Route::patch('/users/{id}', [UserController::class, "update"]);
+        Route::delete('/users/{id}', [UserController::class, "delete"]);
+    });
+
+});
